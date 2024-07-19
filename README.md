@@ -1,6 +1,10 @@
 # sync-google-calendars
 A Google Apps Script to synchronize events between multiple Google Calendars. The script checks for updates, deletions, and new events, ensuring that specified calendars remain consistent with each other.
 
+## Background
+
+This project arose from the need to display availability in Outlook, considering multiple personal Google Calendars. Since Outlook allows adding only one personal calendar, the solution was to create a new Google account, grant access to the calendars to be included for availability, and use this script to combine events into the primary calendar of that account. Finally, this primary calendar is used in Outlook to reflect the combined availability.
+
 ## Features
 * Synchronizes events from non-primary Google Calendars to the primary Google Calendar.
 * Handles event creation, updates, and deletions.
