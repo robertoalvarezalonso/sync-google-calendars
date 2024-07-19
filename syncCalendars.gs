@@ -6,7 +6,8 @@ function syncCalendars() {
     console.log('No calendars found.');
     return;
   }
-  // Print the calendar id and calendar summary
+
+  // Sync every non-primery calendar with primary
   for (const calendar of calendars.items) {
     if (!calendar.primary) {
       console.log('ID: %s', calendar.id);
@@ -15,6 +16,16 @@ function syncCalendars() {
   }
 }
 
+/**
+ * Retrieve events from the given calendar that have been modified
+ * since the last sync and CUD them in the primary calendar. 
+ * If the sync token is missing or invalid, log all
+ * events from up to a month ago (a full sync).
+ *
+ * @param {string} calendarId The ID of the calender to retrieve events from.
+ * @param {boolean} fullSync If true, throw out any existing sync token and
+ *        perform a full sync; if false, use the existing sync token if possible.
+ */
 function logSyncedEvents(calendarId, fullSync) {
   const properties = PropertiesService.getUserProperties();
   const syncTokenKey = `syncToken_${calendarId}`;
@@ -28,13 +39,11 @@ function logSyncedEvents(calendarId, fullSync) {
   if (syncToken && !fullSync) {
     options.syncToken = syncToken;
   } else {
-    // Sync events up to thirty days in the past.
-    //options.timeMin = new Date().toISOString();
-    //options.timeMin = new Date(new Date().getFullYear(), 0, 1).toISOString()
+    // We keep updated only the events from the last 7 days to 180 days from now
     options.timeMin = getRelativeDate(-7, 0).toISOString();
-    //options.timeMax = getRelativeDate(14, 0).toISOString();
     options.timeMax = getRelativeDate(180, 0).toISOString();
   }
+
   // Retrieve events one page at a time.
   let events;
   let pageToken;
@@ -57,7 +66,7 @@ function logSyncedEvents(calendarId, fullSync) {
       return;
     }
     events.items.forEach(event => {
-      // Uppercase letters, 'z' and '_' are not valid characteres
+      // Uppercase letters, 'z' and '_' are not valid characteres for the ID
       const eventId = event.getId().toLowerCase().replace(/_/g, '').replace(/z/g, '');
 
       if (event.status === 'cancelled') {
