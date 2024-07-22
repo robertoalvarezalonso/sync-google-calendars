@@ -70,7 +70,13 @@ function logSyncedEvents(calendarId, fullSync) {
       const eventId = event.getId().toLowerCase().replace(/_/g, '').replace(/z/g, '');
 
       if (event.status === 'cancelled') {
-        Calendar.Events.remove('primary', eventId)
+        try {
+          Calendar.Events.remove('primary', eventId);
+          console.log('Delete %s', eventId);
+        }
+        catch (error) {
+          console.log('Failure trying to delete %s', event.id);
+        }
         return;
       }
 
@@ -95,7 +101,7 @@ function logSyncedEvents(calendarId, fullSync) {
       } catch (error) {
         console.log('Failure trying to get %s (%s) [%s]: %s', event.summary, start.toLocaleDateString(), event.id, error.message)
 
-        updatedEvent.id=eventId;
+        updatedEvent.id = eventId;
         Calendar.Events.insert(updatedEvent, 'primary');
         console.log('Insert %s (%s) [%s]', event.summary, start.toLocaleString(), eventId);
       }
