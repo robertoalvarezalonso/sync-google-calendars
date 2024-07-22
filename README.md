@@ -3,7 +3,7 @@ A Google Apps Script to synchronize events between multiple Google Calendars. Th
 
 ## Background
 
-This project arose from the need to display availability in Outlook, considering multiple personal Google Calendars. Since Outlook allows adding only one personal calendar, the solution was to create a new Google account, grant access to the calendars to be included for availability, and use this script to combine events into the primary calendar of that account. Finally, this primary calendar is used in Outlook to reflect the combined availability.
+This project arose from the need to display availability in Outlook, considering multiple personal Google Calendars. Since Outlook allows adding only one personal calendar, the solution was to create a new Google account, grant access to the calendars to be included for availability, and use this script to combine events into the primary calendar of that account. Finally, this primary calendar is [used in Outlook](https://support.microsoft.com/en-us/office/show-personal-events-on-your-work-or-school-calendar-6ffc71a9-0943-415a-8482-ce0122528a35) to reflect the combined availability.
 
 ## Features
 * Synchronizes events from non-primary Google Calendars to the primary Google Calendar.
